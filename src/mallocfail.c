@@ -16,7 +16,7 @@ efficient and reliable than e.g. random testing.
 
 */
 
-#define uthash_malloc libc_malloc
+#define uthash_malloc malloc
 
 #include "uthash.h"
 #include "sha3.h"
@@ -36,9 +36,6 @@ efficient and reliable than e.g. random testing.
 #define HASH_HEX_BYTES ((HASH_BITS)/4)
 
 extern int force_libc;
-extern void *(*libc_malloc)(size_t);
-extern void *(*libc_calloc)(size_t, size_t);
-extern void *(*libc_realloc)(void *, size_t);
 
 struct traces_s {
 	UT_hash_handle hh;
@@ -69,7 +66,7 @@ static int append_stack_context(const char *filename, const char *hash_str)
 {
 	FILE *fptr;
 
-	struct traces_s *t = libc_malloc(sizeof(struct traces_s));
+	struct traces_s *t = malloc(sizeof(struct traces_s));
 	memcpy(t->hash, hash_str, HASH_HEX_BYTES);
 	t->hash[HASH_HEX_BYTES] = '\0';
 	HASH_ADD_STR(traces, hash, t);
@@ -99,8 +96,8 @@ static void load_traces(const char *filename)
 		if(fgets(buf, 1024, fptr)){
 			if(buf[strlen(buf)-1] == '\n'){
 				buf[strlen(buf)-1] = '\0';
-				
-				struct traces_s *t = libc_malloc(sizeof(struct traces_s));
+
+				struct traces_s *t = malloc(sizeof(struct traces_s));
 				memcpy(t->hash, buf, HASH_HEX_BYTES);
 				t->hash[HASH_HEX_BYTES] = '\0';
 				HASH_ADD_STR(traces, hash, t);

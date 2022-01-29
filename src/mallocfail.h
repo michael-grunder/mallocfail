@@ -19,6 +19,21 @@ efficient and reliable than e.g. random testing.
 
 */
 
+#define MALLOCFAIL_MAJOR 0
+#define MALLOCFAIL_MINOR 0
+#define MALLOCFAIL_PATCH 1
+#define MALLOCFAIL_SONAME 0.0.1
+
+#include <stddef.h>
+
 int should_malloc_fail(void);
+
+void *mallocfail_malloc(size_t size);
+void *mallocfail_calloc(size_t nmemb, size_t size);
+void *mallocfail_realloc(void *ptr, size_t size);
+char *mallocfail_strdup(const char *str);
+char *mallocfail_strndup(const char *str, size_t len);
+
+void mallocfail_set_hook(void (*mallocfail_hook)(void));
 
 #endif
